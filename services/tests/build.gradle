@@ -52,16 +52,6 @@ dependencies {
     runtimeOnly("org.seleniumhq.selenium:selenium-json:$seleniumVersion")
 }
 
-testing {
-    suites {
-        // Configure the built-in test suite
-        test {
-            // Use TestNG test framework
-            useTestNG('7.5')
-        }
-    }
-}
-
 application {
     // Define the main class for the application.
     mainClass = 'tech.romashov.App'
@@ -72,4 +62,8 @@ tasks.register('runTests', Test) {
     useTestNG()
     testClassesDirs = sourceSets.main.output.classesDirs
     classpath = sourceSets.main.runtimeClasspath
+}
+
+tasks.named('test', Test) {
+    useTestNG()
 }
