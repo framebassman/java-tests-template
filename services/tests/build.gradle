@@ -37,7 +37,7 @@ dependencies {
     implementation 'org.springframework:spring-aspects'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '5.0.0-alpha.11'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp-urlconnection', version: '5.0.0-alpha.11'
-    implementation group: 'com.codeborne', name: 'selenide', version: '6.7.0'
+    implementation group: 'com.codeborne', name: 'selenide', version: '6.8.0'
     implementation group: 'org.seleniumhq.selenium', name: 'selenium-api', version: seleniumVersion
     implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: seleniumVersion
     implementation group: 'org.seleniumhq.selenium', name: 'selenium-remote-driver', version: seleniumVersion
