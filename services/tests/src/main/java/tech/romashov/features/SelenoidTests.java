@@ -1,15 +1,17 @@
 package tech.romashov.features;
 
+import com.codeborne.selenide.Selenide;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
-import tech.romashov.steps.SelenoidSteps;
+import tech.romashov.steps.SelenoidApiSteps;
 
 public class SelenoidTests extends BaseTest {
     @Autowired
-    private SelenoidSteps selenoidSteps;
+    private SelenoidApiSteps selenoidApiSteps;
 
     @Test
     public void itWorks() throws Throwable {
-        selenoidSteps.waitForRunningSelenoid();
+        selenoidApiSteps.waitForRunningSelenoid();
+        Selenide.open("http://ya.ru");
     }
 }

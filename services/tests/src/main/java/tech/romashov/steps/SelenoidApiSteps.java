@@ -5,14 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestClientException;
 import tech.romashov.matchers.AssertWithTimeout;
 import tech.romashov.requests.SelenoidRequests;
 
 import static org.hamcrest.Matchers.equalTo;
 
 @Component
-public class SelenoidSteps {
+public class SelenoidApiSteps {
     @Autowired
     private SelenoidRequests selenoidRequests;
 
