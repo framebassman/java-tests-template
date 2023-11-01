@@ -18,3 +18,11 @@ services:
     ports:
       - "8080:8080"
     command: ["--selenoid-uri", "http://selenoid:4444"]
+  selenoid-video-recorder:
+    container_name: selenoid-video-recorder
+    image: "selenoid/video-recorder:latest-release"
+    network_mode: bridge
+    links:
+      - selenoid
+    volumes:
+      - "$PWD/services/selenoid/video:/opt/selenoid/video"
