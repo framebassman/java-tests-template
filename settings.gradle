@@ -9,4 +9,4 @@
  */
 
 rootProject.name = 'java-tests-template'
-include('app')
+include(':services:tests')
