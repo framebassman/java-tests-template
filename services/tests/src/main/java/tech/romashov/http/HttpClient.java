@@ -1,8 +1,7 @@
 package tech.romashov.http;
 
 import okhttp3.OkHttpClient;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
+import tech.romashov.Logger;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -23,10 +23,11 @@ import java.util.concurrent.Callable;
 
 @Component
 public class HttpClient {
+    @Autowired
+    private Logger logger;
     private RestTemplate template;
     public String lastExecutedRequestDescription;
     public String lastReceivedResponseDescription;
-    private Log logger = LogFactory.getLog(getClass());
 
     public HttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()

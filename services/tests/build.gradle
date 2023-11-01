@@ -52,6 +52,7 @@ application {
 }
 
 tasks.register('runTests', Test) {
+    outputs.upToDateWhen { false }
     useTestNG()
     testClassesDirs = sourceSets.main.output.classesDirs
     classpath = sourceSets.main.runtimeClasspath
