@@ -24,15 +24,16 @@ dependencies {
     // This dependency is used by the application.
     implementation group: 'org.testng', name: 'testng', version: '7.8.0'
     implementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.0-alpha1'
-    implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '2.0.0-alpha1'
-    implementation group: 'log4j', name: 'log4j', version: '1.2.17'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.9'
+    implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '2.0.9'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j', version: '3.0.0-alpha1'
     implementation 'org.springframework:spring-context'
     implementation 'org.springframework:spring-web'
     implementation 'org.springframework:spring-test'
     implementation 'org.springframework:spring-aspects'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '5.0.0-alpha.11'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp-urlconnection', version: '5.0.0-alpha.11'
+    implementation group: 'com.codeborne', name: 'selenide', version: '6.19.1'
 }
 
 testing {
