@@ -17,7 +17,9 @@ plugins {
 }
 
 ext {
-  seleniumVersion = '4.3.0'
+    seleniumVersion = '4.3.0'
+    testngVersion = '7.8.0'
+    allureVersion = '2.24.0'
 }
 
 repositories {
@@ -27,7 +29,7 @@ repositories {
 
 dependencies {
     // This dependency is used by the application.
-    implementation group: 'org.testng', name: 'testng', version: '7.8.0'
+    implementation group: 'org.testng', name: 'testng', version: testngVersion
     implementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.9'
     implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '2.0.9'
@@ -51,9 +53,9 @@ dependencies {
     runtimeOnly("org.seleniumhq.selenium:selenium-remote-driver:$seleniumVersion")
     runtimeOnly("org.seleniumhq.selenium:selenium-devtools-v85:$seleniumVersion")
     runtimeOnly("org.seleniumhq.selenium:selenium-json:$seleniumVersion")
-    implementation group: 'io.qameta.allure', name: 'allure-testng', version: '2.24.0'
-    implementation group: 'io.qameta.allure', name: 'allure-selenide', version: '2.24.0'
-    implementation group: 'io.qameta.allure', name: 'allure-okhttp3', version: '2.24.0'
+    implementation group: 'io.qameta.allure', name: 'allure-testng', version: allureVersion
+    implementation group: 'io.qameta.allure', name: 'allure-selenide', version: allureVersion
+    implementation group: 'io.qameta.allure', name: 'allure-okhttp3', version: allureVersion
 }
 
 application {
@@ -61,13 +63,16 @@ application {
     mainClass = 'tech.romashov.App'
 }
 
+allure {
+    version = allureVersion
+    useTestNG {
+        version = testngVersion
+    }
+}
+
 tasks.register('runTests', Test) {
     outputs.upToDateWhen { false }
     useTestNG()
     testClassesDirs = sourceSets.main.output.classesDirs
     classpath = sourceSets.main.runtimeClasspath
-}
-
-tasks.named('test', Test) {
-    useTestNG()
 }

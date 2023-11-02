@@ -7,8 +7,11 @@ services:
     ports:
       - "4444:4444"
     volumes:
-      - "$PWD/services/selenoid:/etc/selenoid/" # assumed current dir contains browsers.json
       - "/var/run/docker.sock:/var/run/docker.sock"
+      - "$PWD/services/selenoid:/etc/selenoid/" # assumed current dir contains browsers.json
+      - "$PWD/services/selenoid/video:/opt/selenoid/video"
+    environment:
+      - OVERRIDE_VIDEO_OUTPUT_DIR=$PWD/services/selenoid/video
   selenoid-ui:
     container_name: selenoid-ui
     image: "aerokube/selenoid-ui"
@@ -21,8 +24,3 @@ services:
   selenoid-video-recorder:
     container_name: selenoid-video-recorder
     image: "selenoid/video-recorder:latest-release"
-    network_mode: bridge
-    links:
-      - selenoid
-    volumes:
-      - "$PWD/services/selenoid/video:/opt/selenoid/video"

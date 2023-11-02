@@ -1,19 +1,24 @@
 package tech.romashov.core;
 
 import com.codeborne.selenide.WebDriverProvider;
+import io.qameta.allure.Attachment;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.springframework.stereotype.Component;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@Component
 public class SelenoidWebDriverProvider implements WebDriverProvider {
+    private RemoteWebDriver remoteWebDriver;
+    private String selenoidHost = "http://localhost:4444";
+
     @NotNull
     @Override
     public WebDriver createDriver(@NotNull Capabilities capabilities) {
@@ -33,22 +38,10 @@ public class SelenoidWebDriverProvider implements WebDriverProvider {
                 put("enableVNC", true);
             }});
             capabilities = capabilities.merge(chromeOptions);
-            return new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), capabilities);
+            remoteWebDriver = new RemoteWebDriver(new URL(selenoidHost + "/wd/hub"), capabilities);
+            return remoteWebDriver;
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
     }
-
-//    @NotNull
-//    @Override
-//    public WebDriver createDriver(DesiredCapabilities capabilities) {
-//        try {
-//            ChromeOptions chromeOptions = new ChromeOptions();
-//            chromeOptions.setCapability("enableVNC", true);
-//            capabilities = capabilities.merge(chromeOptions);
-//            return new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), capabilities);
-//        } catch (MalformedURLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 }
