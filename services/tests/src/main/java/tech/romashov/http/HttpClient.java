@@ -1,5 +1,6 @@
 package tech.romashov.http;
 
+import io.qameta.allure.okhttp3.AllureOkHttp3;
 import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -37,6 +38,7 @@ public class HttpClient {
                 .readTimeout(Duration.ofMinutes(1))
                 .writeTimeout(Duration.ofMinutes(1));
         OkHttpClient client = builder.build();
+        client.interceptors().add(new AllureOkHttp3());
         template = new RestTemplate(new OkHttp3ClientHttpRequestFactory(client));
         DefaultUriBuilderFactory handler = new DefaultUriBuilderFactory();
         handler.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.NONE);

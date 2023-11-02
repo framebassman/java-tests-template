@@ -1,5 +1,6 @@
 package tech.romashov.steps;
 
+import io.qameta.allure.Step;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ public class SelenoidApiSteps {
     @Autowired
     private SelenoidRequests selenoidRequests;
 
+    @Step("Wait for the Selenoid running")
     public void waitForRunningSelenoid() throws Throwable {
         AssertWithTimeout.assertThat(
                 () -> {

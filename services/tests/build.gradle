@@ -50,6 +50,9 @@ dependencies {
     runtimeOnly("org.seleniumhq.selenium:selenium-remote-driver:$seleniumVersion")
     runtimeOnly("org.seleniumhq.selenium:selenium-devtools-v85:$seleniumVersion")
     runtimeOnly("org.seleniumhq.selenium:selenium-json:$seleniumVersion")
+    implementation group: 'io.qameta.allure', name: 'allure-testng', version: '2.24.0'
+    implementation group: 'io.qameta.allure', name: 'allure-selenide', version: '2.24.0'
+    implementation group: 'io.qameta.allure', name: 'allure-okhttp3', version: '2.24.0'
 }
 
 application {
