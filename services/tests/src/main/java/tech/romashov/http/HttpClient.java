@@ -36,9 +36,9 @@ public class HttpClient {
                 .callTimeout(Duration.ofMinutes(1))
                 .connectTimeout(Duration.ofMinutes(1))
                 .readTimeout(Duration.ofMinutes(1))
-                .writeTimeout(Duration.ofMinutes(1));
+                .writeTimeout(Duration.ofMinutes(1))
+                .addInterceptor(new AllureOkHttp3());
         OkHttpClient client = builder.build();
-        client.interceptors().add(new AllureOkHttp3());
         template = new RestTemplate(new OkHttp3ClientHttpRequestFactory(client));
         DefaultUriBuilderFactory handler = new DefaultUriBuilderFactory();
         handler.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.NONE);
