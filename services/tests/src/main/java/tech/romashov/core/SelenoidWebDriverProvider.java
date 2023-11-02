@@ -1,4 +1,4 @@
-package tech.romashov;
+package tech.romashov.core;
 
 import com.codeborne.selenide.WebDriverProvider;
 import org.jetbrains.annotations.NotNull;

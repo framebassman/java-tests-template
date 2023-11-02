@@ -1,4 +1,4 @@
-package tech.romashov;
+package tech.romashov.core;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

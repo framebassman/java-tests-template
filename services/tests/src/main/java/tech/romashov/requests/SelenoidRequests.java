@@ -6,9 +6,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.HtmlUtils;
 import org.springframework.web.util.UriComponentsBuilder;
-import tech.romashov.Logger;
+import tech.romashov.core.Logger;
 import tech.romashov.http.HttpClient;
 
 @Component
