@@ -76,9 +76,9 @@ public class AttachVideoListener implements LogEventListener {
 
     public void attachVideo(String sessionId) {
         try {
-            URL videoList = new URL("http://127.0.0.1:4444/video/");
+            URL videoList = new URL(SelenoidWebDriverProvider.selenoidHost + ":4444/video/");
             String filename = getVideoFilename(videoList);
-            URL website = new URL("http://127.0.0.1:4444/video/" + filename);
+            URL website = new URL(SelenoidWebDriverProvider.selenoidHost + "/video/" + filename);
             LOGGER.info("Trying to attach video: " + website);
             try (BufferedInputStream in = new BufferedInputStream(website.openStream());
                  FileOutputStream fileOutputStream = new FileOutputStream(filename)) {
@@ -96,9 +96,15 @@ public class AttachVideoListener implements LogEventListener {
 
     public void videoInHtml(String sessionId) {
         String filename = sessionId + ".mp4";
-        String htmlTemplate = "<html><body><video width='100%' height='100%' controls autoplay><source src='"
-               + "http://127.0.0.1:4444/video/" + "FILENAME"
-               +"' type='video/mp4'></video></body></html>";
+        String htmlTemplate =
+                "<html>" +
+                "  <body>" +
+                "    <video width='100%' height='100%' controls autoplay>" +
+                "      <source src='" + SelenoidWebDriverProvider.selenoidHost + "/video/" + "FILENAME" +"'" +
+                        "      type='video/mp4'>" +
+                "     </video>" +
+                "  </body>" +
+                "</html>";
         lifecycle.addAttachment("Video HTML", "text/html", ".html", htmlTemplate.replace("FILENAME", filename).getBytes(UTF_8));
     }
 

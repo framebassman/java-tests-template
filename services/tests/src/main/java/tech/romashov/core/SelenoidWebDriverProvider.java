@@ -1,7 +1,6 @@
 package tech.romashov.core;
 
 import com.codeborne.selenide.WebDriverProvider;
-import io.qameta.allure.Attachment;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
@@ -16,8 +15,7 @@ import java.util.HashMap;
 
 @Component
 public class SelenoidWebDriverProvider implements WebDriverProvider {
-    private RemoteWebDriver remoteWebDriver;
-    private String selenoidHost = "http://localhost:4444";
+    public static String selenoidHost = "http://localhost:4444";
 
     @NotNull
     @Override
@@ -38,8 +36,7 @@ public class SelenoidWebDriverProvider implements WebDriverProvider {
                 put("enableVNC", true);
             }});
             capabilities = capabilities.merge(chromeOptions);
-            remoteWebDriver = new RemoteWebDriver(new URL(selenoidHost + "/wd/hub"), capabilities);
-            return remoteWebDriver;
+            return new RemoteWebDriver(new URL(selenoidHost + "/wd/hub"), capabilities);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
