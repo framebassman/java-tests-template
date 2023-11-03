@@ -4,51 +4,31 @@ import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.LogEventListener;
 import com.codeborne.selenide.logevents.SelenideLog;
-import com.google.common.io.Files;
 import io.qameta.allure.Allure;
 import io.qameta.allure.AllureLifecycle;
-import io.qameta.allure.Attachment;
 import io.qameta.allure.model.Status;
 import io.qameta.allure.model.StatusDetails;
 import io.qameta.allure.model.StepResult;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.springframework.context.ApplicationContext;
-import org.testng.IInvokedMethod;
-import org.testng.IInvokedMethodListener;
-import org.testng.ITestContext;
-import org.testng.ITestResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import java.io.BufferedInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static io.qameta.allure.util.ResultsUtils.getStatus;
 import static io.qameta.allure.util.ResultsUtils.getStatusDetails;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-
-//public class AttachVideoListener implements IInvokedMethodListener {
-//    public void beforeInvocation(IInvokedMethod method, ITestResult testResult, ITestContext testContext) {
-//        if (!method.isTestMethod()) {
-//            return;
-//        }
-//        if (testContext.getAttribute("ApplicationContext") == null) {
-//            testContext.setAttribute("ApplicationContext", ApplicationContextProvider.getApplicationContext());
-//        }
-//    }
-//
-//    public void afterInvocation(IInvokedMethod method, ITestResult testResult, ITestContext testContext) {
-//        if (testResult.getStatus() == ITestResult.FAILURE) {
-//            ApplicationContext applicationContext = (ApplicationContext) testContext.getAttribute("ApplicationContext");
-//            applicationContext.getBean(SelenoidWebDriverProvider.class).attachVideoToAllureReport();
-//        }
-//    }
 public class AttachVideoListener implements LogEventListener {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AttachVideoListener.class);
     private final AllureLifecycle lifecycle;
     public AttachVideoListener() {
         this(Allure.getLifecycle());
@@ -71,7 +51,7 @@ public class AttachVideoListener implements LogEventListener {
     @Override
     public void afterEvent(final LogEvent event) {
         if (event.getStatus().equals(LogEvent.EventStatus.FAIL)) {
-            attachVideo(((RemoteWebDriver) WebDriverRunner.getWebDriver()).getSessionId().toString());
+            videoInHtml(((RemoteWebDriver) WebDriverRunner.getWebDriver()).getSessionId().toString());
         }
 
         if (stepsShouldBeLogged(event)) {
@@ -95,39 +75,57 @@ public class AttachVideoListener implements LogEventListener {
     }
 
     public void attachVideo(String sessionId) {
-        List<String> possibleFileNames = Arrays.asList(
-                "selenoid" + sessionId + ".mp4",
-                sessionId + ".mp4"
-        );
-        for (String filename : possibleFileNames) {
-            try {
-                File mp4 = new File(System.getProperty("java.io.tmpdir") + "temp.mp4");
-                mp4.deleteOnExit();
-                URL website = new URL("http://127.0.0.1:4444/video/" + filename);
-                try (ReadableByteChannel rbc = Channels.newChannel(website.openStream());) {
-                    try (FileOutputStream fos = new FileOutputStream(mp4.getName())) {
-                        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-                        lifecycle.addAttachment("Video", "video/mp4", ".mp4", Files.toByteArray(mp4));
-                    }
+        try {
+            URL videoList = new URL("http://127.0.0.1:4444/video/");
+            String filename = getVideoFilename(videoList);
+            URL website = new URL("http://127.0.0.1:4444/video/" + filename);
+            LOGGER.info("Trying to attach video: " + website);
+            try (BufferedInputStream in = new BufferedInputStream(website.openStream());
+                 FileOutputStream fileOutputStream = new FileOutputStream(filename)) {
+                byte dataBuffer[] = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
+                    fileOutputStream.write(dataBuffer, 0, bytesRead);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+                lifecycle.addAttachment("Video", "video/mp4", ".mp4", dataBuffer);
             }
+        } catch (Throwable e) {
+            LOGGER.warn("Can not attach video: " + e.getMessage(), e);
         }
     }
 
     public void videoInHtml(String sessionId) {
-        List<String> possibleFileNames = Arrays.asList("selenoid" + sessionId + ".mp4", sessionId + ".mp4");
+        String filename = sessionId + ".mp4";
         String htmlTemplate = "<html><body><video width='100%' height='100%' controls autoplay><source src='"
                + "http://127.0.0.1:4444/video/" + "FILENAME"
                +"' type='video/mp4'></video></body></html>";
-        for (String filename : possibleFileNames) {
-            lifecycle.addAttachment("Video HTML", "text/html", ".html", htmlTemplate.replace("FILENAME", filename).getBytes(UTF_8));
-        }
+        lifecycle.addAttachment("Video HTML", "text/html", ".html", htmlTemplate.replace("FILENAME", filename).getBytes(UTF_8));
     }
 
     private boolean stepsShouldBeLogged(final LogEvent event) {
         //  other customer Loggers could be configured, they should be logged
         return !(event instanceof SelenideLog);
+    }
+
+    private String getVideoFilename(URL videoList) throws IOException {
+        String prefix = "selenoid";
+        try (InputStream is = videoList.openStream()) {
+            int ptr = 0;
+            StringBuilder html = new StringBuilder();
+            while ((ptr = is.read()) != -1) {
+                html.append((char) ptr);
+            }
+            String[] nodes = html.toString().split(System.lineSeparator());
+            Pattern pattern = Pattern.compile("<a href=\"(selenoid.*\\.mp4)\">");
+            for (String node : nodes) {
+                if (node.startsWith("<a href=\"" + prefix)) {
+                    Matcher matcher = pattern.matcher(node);
+                    while (matcher.find()) {
+                        return matcher.group(1);
+                    }
+                }
+            }
+        }
+        throw new FileNotFoundException(String.format("There is no file with filename starts with '%s'", prefix));
     }
 }

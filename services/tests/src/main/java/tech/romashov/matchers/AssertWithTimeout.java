@@ -15,7 +15,24 @@ public class AssertWithTimeout {
     private static Duration delay = Duration.ofMillis(300);
     private static Log logger = LogFactory.getLog(AssertWithTimeout.class);
 
-    private static <T> T waitAndGetActualValue(Callable<T> getter, Matcher<? super T> matcher) throws Throwable {
+    public static <T> T assertThat(Callable<T> getter, Matcher<? super T> matcher) throws Throwable {
+        return assertThat(getter, matcher, timeout, delay);
+    }
+
+    public static <T> T assertThat(Callable<T> getter, Matcher<? super T> matcher, Duration timeout, Duration delay) throws Throwable {
+        T actual = waitAndGetActualValue(getter, matcher, timeout, delay);
+        if (!matcher.matches(actual)) {
+            Description description = new StringDescription();
+            description.appendText("\nExpected: ")
+                    .appendDescriptionOf(matcher)
+                    .appendText("\n but: ");
+            matcher.describeMismatch(actual, description);
+            throw new AssertionError(description.toString());
+        }
+        return actual;
+    }
+
+    private static <T> T waitAndGetActualValue(Callable<T> getter, Matcher<? super T> matcher, Duration timeout, Duration delay) throws Throwable {
         Instant begin = Instant.now();
         T value = getter.call();
         while (Duration.between(begin, Instant.now()).toMillis() < timeout.toMillis() && !matcher.matches(value)) {
@@ -27,18 +44,5 @@ public class AssertWithTimeout {
             value = getter.call();
         }
         return value;
-    }
-
-    public static <T> T assertThat(Callable<T> getter, Matcher<? super T> matcher) throws Throwable {
-        T actual = waitAndGetActualValue(getter, matcher);
-        if (!matcher.matches(actual)) {
-            Description description = new StringDescription();
-            description.appendText("\nExpected: ")
-                    .appendDescriptionOf(matcher)
-                    .appendText("\n but: ");
-            matcher.describeMismatch(actual, description);
-            throw new AssertionError(description.toString());
-        }
-        return actual;
     }
 }
