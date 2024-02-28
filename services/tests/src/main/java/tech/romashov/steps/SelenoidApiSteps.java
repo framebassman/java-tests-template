@@ -6,8 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
-import tech.romashov.matchers.AssertWithTimeout;
+import tech.romashov.AssertWithTimeout;
 import tech.romashov.requests.SelenoidRequests;
+
+import java.time.Duration;
 
 import static org.hamcrest.Matchers.equalTo;
 
@@ -26,7 +28,8 @@ public class SelenoidApiSteps {
                         return exception.getStatusCode();
                     }
                 },
-                equalTo(HttpStatus.OK)
+                equalTo(HttpStatus.OK),
+                Duration.ofSeconds(4)
         );
     }
 }

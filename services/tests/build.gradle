@@ -56,6 +56,7 @@ dependencies {
     implementation group: 'io.qameta.allure', name: 'allure-testng', version: allureVersion
     implementation group: 'io.qameta.allure', name: 'allure-selenide', version: allureVersion
     implementation group: 'io.qameta.allure', name: 'allure-okhttp3', version: allureVersion
+    implementation group: 'tech.romashov', name: 'assert-with-timeout', version: '1.0.0'
 }
 
 application {
