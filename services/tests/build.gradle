@@ -46,13 +46,13 @@ dependencies {
     implementation group: 'org.seleniumhq.selenium', name: 'selenium-remote-driver', version: seleniumVersion
     implementation group: 'org.seleniumhq.selenium', name: 'selenium-chrome-driver', version: seleniumVersion
     implementation group: 'com.browserup', name: 'browserup-proxy-core', version: '2.1.2'
-    runtimeOnly("io.netty:netty-all:4.1.100.Final")
-    runtimeOnly("io.netty:netty-codec:4.1.100.Final")
-    runtimeOnly("org.seleniumhq.selenium:selenium-api:$seleniumVersion")
-    runtimeOnly("org.seleniumhq.selenium:selenium-chromium-driver:$seleniumVersion")
-    runtimeOnly("org.seleniumhq.selenium:selenium-remote-driver:$seleniumVersion")
-    runtimeOnly("org.seleniumhq.selenium:selenium-devtools-v85:$seleniumVersion")
-    runtimeOnly("org.seleniumhq.selenium:selenium-json:$seleniumVersion")
+    runtimeOnly group: 'io.netty', name: 'netty-all', version: '4.1.100.Final'
+    runtimeOnly group: 'io.netty', name: 'netty-codec', version: '4.1.100.Final'
+    runtimeOnly group: 'org.seleniumhq.selenium', name: 'selenium-api', version: seleniumVersion
+    runtimeOnly group: 'org.seleniumhq.selenium', name: 'selenium-chromium-driver', version: seleniumVersion
+    runtimeOnly group: 'org.seleniumhq.selenium', name: 'selenium-remote-driver', version: seleniumVersion
+    runtimeOnly group: 'org.seleniumhq.selenium', name: 'selenium-devtools-v85', version: seleniumVersion
+    runtimeOnly group: 'org.seleniumhq.selenium', name: 'selenium-json', version: seleniumVersion
     implementation group: 'io.qameta.allure', name: 'allure-testng', version: allureVersion
     implementation group: 'io.qameta.allure', name: 'allure-selenide', version: allureVersion
     implementation group: 'io.qameta.allure', name: 'allure-okhttp3', version: allureVersion
