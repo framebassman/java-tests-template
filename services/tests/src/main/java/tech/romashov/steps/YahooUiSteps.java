@@ -12,6 +12,6 @@ public class YahooUiSteps {
         Selenide.open("https://login.yahoo.com/");
         Selenide.$("#login-username").sendKeys("framebassman@gmail.com");
         Selenide.$("#login-signin").click();
-        Selenide.$(".recaptcha-script").shouldBe(Condition.visible);
+        Selenide.$("#recaptcha-iframe").shouldBe(Condition.visible);
     }
 }
