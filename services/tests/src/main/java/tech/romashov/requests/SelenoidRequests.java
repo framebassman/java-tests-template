@@ -17,9 +17,7 @@ public class SelenoidRequests {
     @Autowired
     private HttpClient httpClient;
     private String baseHost = "http://localhost:8080";
-    private HttpEntity getDefaultHttpEntity() {
-        return new HttpEntity<>("", new HttpHeaders());
-    }
+    private HttpEntity defaultHttpEntity = new HttpEntity<>("", new HttpHeaders());
 
     @Step("Let's ping Selenoid")
     public ResponseEntity<String> ping() {
@@ -28,6 +26,6 @@ public class SelenoidRequests {
                 .build()
                 .toUriString();
         logger.info(String.format("Create GET request to %s", uri));
-        return httpClient.get(uri, getDefaultHttpEntity(), String.class);
+        return httpClient.get(uri, defaultHttpEntity, String.class);
     }
 }
