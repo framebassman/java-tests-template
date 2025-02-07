@@ -5,7 +5,7 @@ run-application:
 		--project-directory=${PWD} \
 		--project-name=$(shell basename $(CURDIR)) \
 		-f deploy/docker-compose.yml \
-		up -d
+		up --build -d
 
 stop-application:
 	docker compose \

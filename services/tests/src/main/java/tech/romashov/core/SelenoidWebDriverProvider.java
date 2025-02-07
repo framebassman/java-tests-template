@@ -22,6 +22,7 @@ public class SelenoidWebDriverProvider implements WebDriverProvider {
     public WebDriver createDriver(@NotNull Capabilities capabilities) {
         try {
             ChromeOptions chromeOptions = new ChromeOptions();
+//            chromeOptions.setCapability("browserVersion", "115.0");
             chromeOptions.setCapability("selenoid:options", new HashMap<String, Object>() {{
                 /* How to set timezone */
                 put("env", new ArrayList<String>() {{
