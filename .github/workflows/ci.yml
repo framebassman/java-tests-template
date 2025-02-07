@@ -33,26 +33,28 @@ jobs:
       - name: Run tests
         run: "make run-tests"
 
-      - name: Load test report history
-        uses: actions/checkout@v3
+      - name: Load Allure test report history
+        uses: actions/checkout@v4
         if: always()
         continue-on-error: true
         with:
           ref: gh-pages
-          path: gh-pages
+          path: gh-pages-dir
 
-      - name: Build test report
-        uses: simple-elf/allure-report-action@v1.7
+      - name: Generate Allure test report
+        uses: andgineer/allure-report@v3.4
+        id: allure-report
         if: always()
         with:
-          gh_pages: gh-pages
-          allure_history: allure-history
-          allure_results: services/tests/build/allure-results
+          allure-results: allure-results
+          website: gh-pages-dir
+          reports-site-path: services/tests/build/allure-results
 
-      - name: Publish test report
+      - name: Publish Allure test report
         uses: peaceiris/actions-gh-pages@v3
-        if: always()
+        if: ${{ always() && (steps.allure-report.outcome == 'success') }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: allure-history
+          publish_dir: ${{ steps.allure-report.outputs.reports-site }}
+          destination_dir: ${{ steps.allure-report.outputs.reports-site-path }}
