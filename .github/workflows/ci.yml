@@ -46,7 +46,7 @@ jobs:
         id: allure-report
         if: always()
         with:
-          allure-results: allure-results
+          allure-results: services/tests/build/allure-results
           website: gh-pages-dir
           reports-site-path: services/tests/build/allure-results
 
