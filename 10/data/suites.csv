@@ -1,0 +1,2 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"failed","Fri Feb 07 17:17:11 GMT 2025","Fri Feb 07 17:17:47 GMT 2025","36139","Gradle suite","Gradle test","tech.romashov.features.SelenoidTests","tech.romashov.features.SelenoidTests","itWorks","itWorks",""
