@@ -17,7 +17,10 @@ stop-application:
 		down
 
 run-tests:
-	gradle --project-dir services/tests runTests
+	gradle \
+		--project-dir services/tests \
+		--info \
+		runTests
 
 setup-and-run:
 	make run-application
