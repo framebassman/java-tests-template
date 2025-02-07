@@ -1,7 +1,7 @@
 services:
   selenoid:
     container_name: selenoid
-    image: "aerokube/selenoid"
+    image: aerokube/selenoid:1.11.3
     network_mode: bridge
     ports:
       - "4444:4444"
@@ -13,13 +13,10 @@ services:
       - OVERRIDE_VIDEO_OUTPUT_DIR=$PWD/services/selenoid/video
   selenoid-ui:
     container_name: selenoid-ui
-    image: "aerokube/selenoid-ui"
+    image: aerokube/selenoid-ui:1.10.11
     network_mode: bridge
     links:
       - selenoid
     ports:
       - "8080:8080"
     command: ["--selenoid-uri", "http://selenoid:4444"]
-#  selenoid-video-recorder:
-#    container_name: selenoid-video-recorder
-#    image: "selenoid/video-recorder:latest-release"
