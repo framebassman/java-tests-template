@@ -37,4 +37,4 @@ jobs:
         uses: mikepenz/action-junit-report@v4
         if: success() || failure()    # run this step even if previous step failed
         with:
-          report_paths: app/build/test-results/runTests/TEST-*.xml    # Path to test results
+          report_paths: services/tests/build/test-results/runTests/TEST-*.xml    # Path to test results
