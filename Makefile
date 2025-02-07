@@ -19,7 +19,6 @@ stop-application:
 run-tests:
 	gradle \
 		--project-dir services/tests \
-		--info \
 		runTests
 
 setup-and-run:
